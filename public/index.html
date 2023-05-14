@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<div id="app">
+    <h1>消費者物價指數</h1>
+    date start: <select onchange="" id="date">
+        <option value="">none</option>
+        <option value="110/01">110/01</option>
+        <option value="110/02">110/02</option>
+        <option value="110/03">110/03</option>
+        <option value="110/04">110/04</option>
+        <option value="110/05">110/05</option>
+        <option value="110/06">110/06</option>
+        <option value="110/07">110/07</option>
+        <option value="110/08">110/08</option>
+        <option value="110/09">110/09</option>
+        <option value="110/10">110/10</option>
+        <option value="110/11">110/11</option>
+        <option value="110/12">110/12</option>
+        <option value="111/01">111/01</option>
+        <option value="111/02">111/02</option>
+        <option value="111/03">111/03</option>
+        <option value="111/04">111/04</option>
+        <option value="111/05">111/05</option>
+        <option value="111/06">111/06</option>
+        <option value="111/07">111/07</option>
+        <option value="111/08">111/08</option>
+        <option value="111/09">111/09</option>
+        <option value="111/10">111/10</option>
+        <option value="111/11">111/11</option>
+        <option value="111/12">111/12</option>
+        <option value="112/01">112/01</option>
+        <option value="112/02">112/02</option>
+        <option value="112/03">112/03</option>
+        <option value="112/04">112/04</option>
+    </select>
+    <br><br>
+    item name: <select onchange="" id="name">
+        <option value="">none</option>
+        <option value="price">egg</option>
+        <option value="vegetable">vegetable</option>
+    </select>
+    <br><br>
+    less than this 消費者物價指數: <input type="text" name="price" id="price">
+    <br><br>
+  <button v-on:click="handleClick">顯示查詢結果</button>
+  <table>
+    <thead>
+    <tr>
+      <th>date</th>
+      <th>name</th>
+      <th>price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="item in data">
+      <td>{{ item.DATE }}</td>
+      <td>{{ item.name }}</td>
+        <td>{{ item.price }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        data: []
+      };
+    },
+    methods: {
+      async handleClick() {
+        console.log("data");
+
+          const date = document.getElementById('date').value;
+          const name = document.getElementById('name').value;
+          const price = document.getElementById('price').value;
+
+        const url = "http://localhost:3000/api?name="+name+"&date="+date+"&price="+price; // 資料傳送到的 URL
+        try {
+          const response = await fetch(url, {
+            method: 'GET',
+          });
+          const res_data = await response.json();
+          this.data = res_data ;
+          console.log("成功", res_data );
+        } catch (error) {
+          console.log("錯誤", error);
+        }
+      }
+    }
+  });
+
+  app.mount('#app');
+</script>
+
+</body>
+</html>
